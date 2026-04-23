@@ -1,17 +1,11 @@
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import pages.BaseTest;
 import pages.RegistrationPage;
 import pages.RegistrationResultsModal;
 
-public class SuccessRegistrationFormTest {
-
-    @BeforeAll
-    static void beforeAll() {
-        Configuration.browserSize = "1920x1080";
-        Configuration.baseUrl = "https://demoqa.com";
-        Configuration.pageLoadStrategy = "eager";
-    }
+public class SuccessRegistrationFormTest extends BaseTest {
 
     @Test
     void fullRegistrationTest() {
@@ -99,3 +93,4 @@ public class SuccessRegistrationFormTest {
         modal.shouldNotBeVisible();
     }
 }
+
