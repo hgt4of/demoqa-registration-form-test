@@ -1,7 +1,11 @@
 package pages;
 
 import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+
+import static com.codeborne.selenide.Selenide.*;
 
 public class BaseTest {
 
@@ -10,5 +14,17 @@ public class BaseTest {
         Configuration.browserSize = "1920x1080";
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
+    }
+
+    @AfterEach
+    void cleanUpAfterEachTest() {
+        clearBrowserCookies();
+        clearBrowserLocalStorage();
+        closeWindow();
+    }
+
+    @AfterAll
+    static void globalTearDown() {
+        closeWebDriver();
     }
 }
