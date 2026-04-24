@@ -1,26 +1,16 @@
-
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pages.BaseTest;
 import pages.TextBoxPage;
 
-    public class TextboxTests extends BaseTest {
-
-    @BeforeAll
-    static void beforeAll() {
-        Configuration.baseUrl = "https://demoqa.com";
-        Configuration.browserSize = "1920x1080";
-        Configuration.pageLoadStrategy = "eager";
-    }
+    public class FakerTextboxTests extends BaseTest {
 
     @Test
     void successTest() {
         // Данные
-        String name = "Ruslan Mironov";
-        String email = "rus@gmail.com";
-        String currentAddress = "address";
-        String permanentAddress = "another address";
+        String name = faker.name().firstName() + " " + faker.name().lastName();
+        String email = faker.internet().emailAddress();
+        String currentAddress = faker.address().fullAddress();
+        String permanentAddress = faker.address().fullAddress();
 
         new TextBoxPage()
                 // Действия

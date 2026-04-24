@@ -1,15 +1,12 @@
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pages.BaseTest;
 import pages.RegistrationPage;
 import pages.RegistrationResultsModal;
 
-public class SuccessRegistrationFormTest extends BaseTest {
+public class FakerSuccessRegistrationFormTest extends BaseTest {
 
     @Test
     void fullRegistrationTest() {
-
         // Данные
         String firstName = faker.name().firstName();
         String lastName = faker.name().lastName();
