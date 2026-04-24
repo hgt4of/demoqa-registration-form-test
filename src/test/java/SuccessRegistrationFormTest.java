@@ -9,13 +9,14 @@ public class SuccessRegistrationFormTest extends BaseTest {
 
     @Test
     void fullRegistrationTest() {
+
         // Данные
-        String firstName = "Ruslan";
-        String lastName = "Mironov";
-        String email = "user" + System.currentTimeMillis() + "@test.com";
-        String phone = "2222222222";
+        String firstName = faker.name().firstName();
+        String lastName = faker.name().lastName();
+        String email = faker.internet().emailAddress();
+        String phone = faker.phoneNumber().subscriberNumber(10);
+        String address = faker.address().fullAddress();
         String subject = "Biology";
-        String address = "currentAddress";
         String state = "Haryana";
         String city = "Karnal";
 
@@ -55,9 +56,9 @@ public class SuccessRegistrationFormTest extends BaseTest {
     @Test
     void minimalDataRegistrationTest() {
         // Данные
-        String firstName = "Ivan";
-        String lastName = "Petrov";
-        String phone = "9998887766";
+        String firstName = faker.name().firstName();
+        String lastName = faker.name().lastName();
+        String phone = faker.phoneNumber().subscriberNumber(10);
 
         // Действия
         RegistrationResultsModal modal = new RegistrationPage()
@@ -78,8 +79,8 @@ public class SuccessRegistrationFormTest extends BaseTest {
     @Test
     void negativeRegistrationTest() {
         //Данные
-        String lastName = "Sidorov";
-        String phone = "1112223344";
+        String lastName = faker.name().lastName();
+        String phone = faker.phoneNumber().subscriberNumber(10);
 
         // Действия
         RegistrationResultsModal modal = new RegistrationPage()
