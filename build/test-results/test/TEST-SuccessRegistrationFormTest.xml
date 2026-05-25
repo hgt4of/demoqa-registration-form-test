@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="SuccessRegistrationFormTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-05-25T22:23:53.887Z" hostname="DESKTOP-LURF93L" time="25.222">
+  <properties/>
+  <testcase name="fullRegistrationTest()" classname="SuccessRegistrationFormTest" time="24.934"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

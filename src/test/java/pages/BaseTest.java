@@ -34,10 +34,10 @@ public class BaseTest {
 
     @AfterEach
     void cleanUpAfterEachTest() {
-        takeScreenshot();
-        getPageSource();
-        getConsoleLogs();
-        addVideo();
+        attachScreenshot();
+        attachPageSource();
+        attachConsoleLogs();
+        attachVideo();
 
         clearBrowserCookies();
         clearBrowserLocalStorage();
@@ -49,34 +49,38 @@ public class BaseTest {
         closeWebDriver();
     }
 
-    private void takeScreenshot() {
-        byte[] screenshot = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.BYTES);
-        Allure.addAttachment("Скриншот", "image/png", new ByteArrayInputStream(screenshot), "png");
+    // 1. Скриншот (через аннотацию @Attachment)
+    @io.qameta.allure.Attachment(value = "Скриншот", type = "image/png")
+    private byte[] attachScreenshot() {
+        return ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.BYTES);
     }
 
-    private void getPageSource() {
-        String pageSource = WebDriverRunner.getWebDriver().getPageSource();
-        Allure.addAttachment("Page Source", "text/html", pageSource, "html");
+    // 2. Page Source
+    @io.qameta.allure.Attachment(value = "Page Source", type = "text/html")
+    private String attachPageSource() {
+        return WebDriverRunner.getWebDriver().getPageSource();
     }
 
-    private void getConsoleLogs() {
+    // 3. Логи консоли
+    @io.qameta.allure.Attachment(value = "Console Logs", type = "text/plain")
+    private String attachConsoleLogs() {
         LogEntries logEntries = WebDriverRunner.getWebDriver().manage().logs().get(LogType.BROWSER);
         StringBuilder logs = new StringBuilder();
         for (LogEntry entry : logEntries) {
             logs.append(entry.getMessage()).append("\n");
         }
-        Allure.addAttachment("Console Logs", "text/plain", logs.toString(), "txt");
+        return logs.toString();
     }
 
-    private void addVideo() {
+    // 4. Видео (через HTML-плеер)
+    @io.qameta.allure.Attachment(value = "Video", type = "text/html", fileExtension = ".html")
+    private String attachVideo() {
         try {
-            // Приводим driver к RemoteWebDriver, чтобы вызвать getSessionId()
             String sessionId = ((org.openqa.selenium.remote.RemoteWebDriver) WebDriverRunner.getWebDriver()).getSessionId().toString();
             String videoUrl = "https://selenoid.autotests.cloud/video/" + sessionId + ".mp4";
-            String videoHtml = "<html><body><video width='100%' height='100%' controls autoplay><source src='" + videoUrl + "' type='video/mp4'></video></body></html>";
-            Allure.addAttachment("Video", "text/html", videoHtml, "html");
+            return "<html><body><video width='100%' height='100%' controls autoplay><source src='" + videoUrl + "' type='video/mp4'></video></body></html>";
         } catch (Exception e) {
-            Allure.addAttachment("Video", "text/plain", "Video not available: " + e.getMessage(), "txt");
+            return "Video not available: " + e.getMessage();
         }
     }
 }
