@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41c9944d-c5e2-45ec-8bc8-987b06006ec1" name="Changes" comment="Add paramitrized config for browser, version, resolution and selenoid">
-      <change afterPath="$PROJECT_DIR$/src/test/java/helpers/Attach.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/base/BaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/base/BaseTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="41c9944d-c5e2-45ec-8bc8-987b06006ec1" name="Changes" comment="Add paramitrized config for browser, version, resolution and selenoid" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
