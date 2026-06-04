@@ -1,43 +1,57 @@
 package base;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import io.qameta.allure.Allure;
+import helpers.Attach;                    // ← импорт из helpers
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.LogType;
 
-import java.io.ByteArrayInputStream;
-
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.clearBrowserCookies;
+import static com.codeborne.selenide.Selenide.clearBrowserLocalStorage;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
+import static com.codeborne.selenide.Selenide.closeWindow;
 
 public class BaseTest {
 
     @BeforeAll
     static void setUp() {
-        Configuration.browserSize = "1920x1080";
+        // Читаем параметры из Jenkins
+        String browser = System.getProperty("browser", "chrome");
+        String browserVersion = System.getProperty("browserVersion", "100.0");
+        String screenResolution = System.getProperty("screenResolution", "1920x1080");
+        String selenoidUrl = System.getProperty("selenoidUrl", "https://user1:1234@selenoid.autotests.cloud/wd/hub");
+
+        // Применяем настройки
+        Configuration.browser = browser;
+        Configuration.browserVersion = browserVersion;
+        Configuration.browserSize = screenResolution;
+        Configuration.remote = selenoidUrl;
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
 
-        Configuration.remote = "https://user1:1234@selenoid.autotests.cloud/wd/hub";
+        // Allure слушатель
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide()
                 .screenshots(true)
                 .savePageSource(true));
+
+        // Выводим параметры в лог
+        System.out.println("=========================================");
+        System.out.println("=== Jenkins Parameters Applied ===");
+        System.out.println("Browser: " + browser);
+        System.out.println("Browser Version: " + browserVersion);
+        System.out.println("Screen Resolution: " + screenResolution);
+        System.out.println("Selenoid URL: " + selenoidUrl);
+        System.out.println("=========================================");
     }
 
     @AfterEach
-    void cleanUpAfterEachTest() {
-        takeScreenshot();
-        getPageSource();
-        getConsoleLogs();
-        addVideo();
+    void addAttachments() {
+        Attach.screenshotAs("Last screenshot");
+        Attach.pageSource();
+        Attach.browserConsoleLogs();
+        Attach.addVideo();
 
         clearBrowserCookies();
         clearBrowserLocalStorage();
@@ -47,39 +61,5 @@ public class BaseTest {
     @AfterAll
     static void globalTearDown() {
         closeWebDriver();
-    }
-
-    private void takeScreenshot() {
-        byte[] screenshot = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.BYTES);
-        Allure.addAttachment("Скриншот", "image/png", new ByteArrayInputStream(screenshot), "png");
-    }
-
-    private void getPageSource() {
-        String pageSource = WebDriverRunner.getWebDriver().getPageSource();
-        Allure.addAttachment("Page Source", "text/html", pageSource, "html");
-    }
-
-    private void getConsoleLogs() {
-        LogEntries logEntries = WebDriverRunner.getWebDriver().manage().logs().get(LogType.BROWSER);
-        StringBuilder logs = new StringBuilder();
-        for (LogEntry entry : logEntries) {
-            logs.append(entry.getMessage()).append("\n");
-        }
-        Allure.addAttachment("Console Logs", "text/plain", logs.toString(), "txt");
-    }
-
-    private void addVideo() {
-        try {
-            String sessionId = ((org.openqa.selenium.remote.RemoteWebDriver) WebDriverRunner.getWebDriver()).getSessionId().toString();
-            String remoteHost = Configuration.remote
-                    .replaceFirst("https://[^@]+@", "https://")  // убираем user:pass@
-                    .replace("/wd/hub", "");                     // убираем /wd/hub
-
-            String videoUrl = remoteHost + "/video/" + sessionId + ".mp4";
-            String videoHtml = "<html><body><video width='100%' height='100%' controls autoplay><source src='" + videoUrl + "' type='video/mp4'></video></body></html>";
-            Allure.addAttachment("Video", "text/html", videoHtml, "html");
-        } catch (Exception e) {
-            Allure.addAttachment("Video", "text/plain", "Video not available: " + e.getMessage(), "txt");
-        }
     }
 }
