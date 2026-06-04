@@ -1,11 +1,9 @@
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import pages.BaseTest;
+import base.BaseTest;
 import pages.RegistrationPage;
 import pages.RegistrationResultsModal;
 
-public class SuccessRegistrationFormTest extends BaseTest {
+public class RegistrationFormTest extends BaseTest {
 
     @Test
     void fullRegistrationTest() {

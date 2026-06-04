@@ -11,7 +11,8 @@ dependencies {
     testImplementation (
             "com.codeborne:selenide:6.19.1",
             "org.junit.jupiter:junit-jupiter:5.9.3",
-            "io.qameta.allure:allure-selenide:2.25.0"
+            "io.qameta.allure:allure-selenide:2.25.0",
+            "org.seleniumhq.selenium:selenium-remote-driver:4.21.0"
     )
 
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
@@ -33,4 +34,14 @@ allure {
 
 test {
     useJUnitPlatform()
+
+    systemProperty "browser", System.getProperty("browser")
+    systemProperty "browserVersion", System.getProperty("browserVersion")
+    systemProperty "screenResolution", System.getProperty("screenResolution")
+    systemProperty "selenoidUrl", System.getProperty("selenoidUrl")
+
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+        exceptionFormat "full"
+    }
 }

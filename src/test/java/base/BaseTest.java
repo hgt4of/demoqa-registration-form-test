@@ -1,4 +1,4 @@
-package pages;
+package base;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
@@ -71,7 +71,11 @@ public class BaseTest {
     private void addVideo() {
         try {
             String sessionId = ((org.openqa.selenium.remote.RemoteWebDriver) WebDriverRunner.getWebDriver()).getSessionId().toString();
-            String videoUrl = "https://selenoid.autotests.cloud/video/" + sessionId + ".mp4";
+            String remoteHost = Configuration.remote
+                    .replaceFirst("https://[^@]+@", "https://")  // убираем user:pass@
+                    .replace("/wd/hub", "");                     // убираем /wd/hub
+
+            String videoUrl = remoteHost + "/video/" + sessionId + ".mp4";
             String videoHtml = "<html><body><video width='100%' height='100%' controls autoplay><source src='" + videoUrl + "' type='video/mp4'></video></body></html>";
             Allure.addAttachment("Video", "text/html", videoHtml, "html");
         } catch (Exception e) {
