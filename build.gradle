@@ -9,10 +9,9 @@ repositories {
 
 dependencies {
     testImplementation (
-            "com.codeborne:selenide:6.19.1",
-            "org.junit.jupiter:junit-jupiter:5.9.3",
-            "io.qameta.allure:allure-selenide:2.25.0",
-            "org.seleniumhq.selenium:selenium-remote-driver:4.21.0"
+            "com.codeborne:selenide:7.2.1",
+            "org.junit.jupiter:junit-jupiter:5.10.3",
+            "io.qameta.allure:allure-selenide:2.25.0"
     )
 
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"

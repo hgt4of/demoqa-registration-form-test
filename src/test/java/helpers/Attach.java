@@ -5,6 +5,9 @@ import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Attachment;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import static com.codeborne.selenide.Selenide.sessionId;
@@ -43,17 +46,11 @@ public class Attach {
     }
 
     public static String getVideoUrl() {
-        // Берём хост из Configuration.remote (который пришёл из Jenkins)
         String remoteHost = Configuration.remote;
-
-        // Убираем "https://user:pass@" если есть
         remoteHost = remoteHost.replaceFirst("https://[^@]+@", "https://");
-
-        // Убираем "/wd/hub" в конце
         if (remoteHost.endsWith("/wd/hub")) {
             remoteHost = remoteHost.substring(0, remoteHost.length() - "/wd/hub".length());
         }
-
         return remoteHost + "/video/" + sessionId() + ".mp4";
     }
 }
